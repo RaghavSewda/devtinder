@@ -1,9 +1,19 @@
 const express = require("express");
 const connectDB = require("./config/database");
 const cookieParser = require("cookie-parser");
+const cors = require("cors");
+const dotenv = require("dotenv");
+
+require("dotenv").config();
 
 const app = express();
 
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(cookieParser());
 
@@ -19,8 +29,10 @@ app.use("/", userRouter);
 connectDB()
   .then(() => {
     console.log("Database connection established..");
-    app.listen(7777, () => {
-      console.log("Server is successfully listening on port 7777...");
+    app.listen(process.env.PORT, () => {
+      console.log(
+        `Server is successfully listening on port ${process.env.PORT}...`
+      );
     });
   })
   .catch((err) => {
